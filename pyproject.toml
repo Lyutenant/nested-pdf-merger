@@ -38,7 +38,7 @@ dev = [
 nestedpdfmerger = "nestedpdfmerger.cli:main"
 
 [project.urls]
-Repository = "https://github.com/chenglyu/nested-pdf-merger"
+Repository = "https://github.com/Lyutenant/nested-pdf-merger"
 
 [tool.setuptools.packages.find]
 where = ["src"]
