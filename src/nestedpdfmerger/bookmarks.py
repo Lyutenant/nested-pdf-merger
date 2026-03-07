@@ -31,4 +31,7 @@ class Bookmark:
         self._children.append(child)
 
     def __repr__(self) -> str:
-        return f"Bookmark(page={self._page!r}, title={self._title!r}, children={len(self._children)})"
+        return (
+            f"Bookmark(page={self._page!r}, title={self._title!r},"
+            f" children={len(self._children)})"
+        )

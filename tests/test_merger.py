@@ -2,16 +2,15 @@
 
 from __future__ import annotations
 
-import pytest
 from pathlib import Path
 
+import pytest
 from pypdf import PdfReader, PdfWriter
 
 from nestedpdfmerger import merge_pdf_tree
 from nestedpdfmerger.cli import build_parser
 from nestedpdfmerger.errors import MergeError
 from nestedpdfmerger.sorting import sort_paths
-
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -68,7 +67,9 @@ def output_pdf(tmp_path: Path) -> Path:
 
 
 class TestMergeOrder:
-    def test_alpha_sort_produces_correct_order(self, tmp_path: Path, output_pdf: Path) -> None:
+    def test_alpha_sort_produces_correct_order(
+        self, tmp_path: Path, output_pdf: Path
+    ) -> None:
         make_pdf(tmp_path / "b.pdf")
         make_pdf(tmp_path / "a.pdf")
         make_pdf(tmp_path / "c.pdf")
@@ -79,7 +80,9 @@ class TestMergeOrder:
         titles = [item.title for item in reader.outline]
         assert titles == ["a", "b", "c"]
 
-    def test_natural_sort_handles_numbers(self, tmp_path: Path, output_pdf: Path) -> None:
+    def test_natural_sort_handles_numbers(
+        self, tmp_path: Path, output_pdf: Path
+    ) -> None:
         for name in ("file10.pdf", "file2.pdf", "file1.pdf"):
             make_pdf(tmp_path / name)
 
@@ -89,11 +92,15 @@ class TestMergeOrder:
         titles = [item.title for item in reader.outline]
         assert titles == ["file1", "file2", "file10"]
 
-    def test_reverse_flag_reverses_order(self, tmp_path: Path, output_pdf: Path) -> None:
+    def test_reverse_flag_reverses_order(
+        self, tmp_path: Path, output_pdf: Path
+    ) -> None:
         for name in ("a.pdf", "b.pdf", "c.pdf"):
             make_pdf(tmp_path / name)
 
-        merge_pdf_tree(tmp_path, output_pdf, sort_mode="alpha", reverse=True, bookmarks=True)
+        merge_pdf_tree(
+            tmp_path, output_pdf, sort_mode="alpha", reverse=True, bookmarks=True
+        )
 
         reader = PdfReader(str(output_pdf))
         titles = [item.title for item in reader.outline]
@@ -112,7 +119,9 @@ class TestMergeOrder:
 
 
 class TestBookmarkHierarchy:
-    def test_flat_bookmarks_for_root_pdfs(self, tmp_path: Path, output_pdf: Path) -> None:
+    def test_flat_bookmarks_for_root_pdfs(
+        self, tmp_path: Path, output_pdf: Path
+    ) -> None:
         make_pdf(tmp_path / "a.pdf")
         make_pdf(tmp_path / "b.pdf")
 
@@ -150,7 +159,9 @@ class TestBookmarkHierarchy:
 
 
 class TestFolderExclusion:
-    def test_excluded_directory_is_skipped(self, tmp_path: Path, output_pdf: Path) -> None:
+    def test_excluded_directory_is_skipped(
+        self, tmp_path: Path, output_pdf: Path
+    ) -> None:
         make_pdf(tmp_path / "keep.pdf")
         (tmp_path / "Backup").mkdir()
         make_pdf(tmp_path / "Backup" / "skip.pdf")
@@ -188,7 +199,9 @@ class TestFolderExclusion:
 
 
 class TestEmptyDirectory:
-    def test_empty_root_produces_empty_pdf(self, tmp_path: Path, output_pdf: Path) -> None:
+    def test_empty_root_produces_empty_pdf(
+        self, tmp_path: Path, output_pdf: Path
+    ) -> None:
         merge_pdf_tree(tmp_path, output_pdf)
         reader = PdfReader(str(output_pdf))
         assert len(reader.pages) == 0
